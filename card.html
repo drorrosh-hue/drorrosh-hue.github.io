@@ -68,6 +68,9 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
 .sheet .qrimg{width:200px;display:none;margin:12px auto 0}
 .sheet .qrimg.on{display:block}
 .sheet .close{margin-top:12px;background:transparent!important;color:var(--ink2)!important;height:44px!important}
+.install{margin:14px 18px 0;display:flex;align-items:center;justify-content:center;gap:10px;height:56px;width:calc(100% - 36px);border:2px dashed var(--gold);border-radius:16px;background:transparent;color:var(--teald);font:800 17.5px Heebo,Arial,sans-serif;cursor:pointer}
+.ins-steps{text-align:right;color:var(--ink2);font-size:16px;line-height:1.7;margin:4px 4px 6px}
+.ins-steps b{color:var(--teald)}
 </style></head><body>
 <main class="card">
  <div class="top"><img class="logo" src="img/logo-dg.jpg" alt="לוגו"><span class="tag">כרטיס ביקור דיגיטלי</span><button class="topshare" data-open>📤 שיתוף</button></div>
@@ -87,6 +90,7 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
   <a class="btn save" href="dror-gal.vcf" download><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>שמירת איש קשר בטלפון</a>
  </div>
 
+ <button class="install" id="installBtn">📲 התקנת הכרטיס בטלפון שלי</button>
 
  <section class="share" id="share"><h2>שתפו את הכרטיס</h2>
   <div class="row">
@@ -113,6 +117,10 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
  <img class="qrimg" id="sQrImg" src="img/card-qr.png" alt="קוד QR">
  <button class="close" id="sClose">סגירה</button>
 </div></div></div>
+<div class="sheet" id="insSheet"><div class="box"><h3>📲 התקנת הכרטיס בטלפון</h3>
+ <div class="ins-steps" id="insAndroid"><b>באנדרואיד (כרום):</b><br>1. לוחצים על ⋮ (שלוש הנקודות למעלה)<br>2. בוחרים "הוספה למסך הבית" או "התקנת אפליקציה"<br>3. מאשרים, והכרטיס מופיע במסך עם אייקון</div>
+ <div class="ins-steps" id="insIos"><b>באייפון (ספארי):</b><br>1. לוחצים על כפתור השיתוף (ריבוע עם חץ למעלה)<br>2. גוללים ובוחרים "הוספה למסך הבית"<br>3. לוחצים "הוסף", והכרטיס מופיע במסך עם אייקון</div>
+ <div class="opts"><button class="close" id="insClose">סגירה</button></div></div></div>
 <div class="toast" id="toast">הקישור הועתק ✓</div>
 <script>
 (function(){
@@ -140,6 +148,21 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
  document.getElementById("sNative").onclick=document.getElementById("shareBtn").onclick;
  document.getElementById("sQr").onclick=function(){document.getElementById("sQrImg").classList.toggle("on")};
  if(!navigator.share){document.getElementById("sNative").style.display="none"}
+
+ var deferred=null, insBtn=document.getElementById("installBtn"), insSheet=document.getElementById("insSheet");
+ var standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+ if(standalone){insBtn.style.display="none"}
+ window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferred=e});
+ window.addEventListener("appinstalled",function(){insBtn.style.display="none";show("הכרטיס הותקן ✓")});
+ var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ document.getElementById(ios?"insAndroid":"insIos").style.display="none";
+ insBtn.onclick=function(){
+  if(deferred){deferred.prompt();deferred.userChoice.then(function(){deferred=null})}
+  else{insSheet.classList.add("on")}
+ };
+ document.getElementById("insClose").onclick=function(){insSheet.classList.remove("on")};
+ insSheet.onclick=function(e){if(e.target===insSheet)insSheet.classList.remove("on")};
+ if("serviceWorker" in navigator){navigator.serviceWorker.register("card-sw.js",{scope:"/card"}).catch(function(){})}
 })();
 </script>
 </body></html>

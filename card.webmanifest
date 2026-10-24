@@ -2,7 +2,7 @@
   "name": "כרטיס ביקור · דרור גל מעסה רפואי",
   "short_name": "כרטיס ביקור",
   "start_url": "/card.html",
-  "scope": "/",
+  "scope": "/card",
   "display": "standalone",
   "dir": "rtl",
   "lang": "he",
