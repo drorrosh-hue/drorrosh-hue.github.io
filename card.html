@@ -38,6 +38,17 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
 .hours{display:flex;justify-content:space-between}
 .foot{text-align:center;font-size:13px;color:var(--ink2);padding:22px 18px 32px}
 .foot a{color:var(--teal)}
+.share{margin:22px 18px 0;background:var(--teald);border-radius:18px;padding:18px;color:#fff;text-align:center}
+.share h2{font-size:19px;margin-bottom:12px;color:var(--goldl)}
+.share .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.share button,.share a{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:14px;border:0;font:700 16.5px Heebo,Arial,sans-serif;text-decoration:none;cursor:pointer;background:var(--cream);color:var(--teald)}
+.share .main{grid-column:1/-1;background:var(--goldl);height:58px;font-size:18.5px}
+.qr{display:none;margin-top:14px;background:var(--cream);border-radius:16px;padding:14px}
+.qr img{width:210px;height:210px;display:block;margin:0 auto}
+.qr p{color:var(--ink2);font-size:14.5px;margin-top:8px}
+.qr.on{display:block}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:30px;font-size:15px;opacity:0;transition:.3s;pointer-events:none}
+.toast.on{opacity:.92}
 </style></head><body>
 <main class="card">
  <div class="top"><img class="logo" src="img/logo-dg.jpg" alt="לוגו"><span class="tag">כרטיס ביקור דיגיטלי</span></div>
@@ -57,6 +68,16 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
   <a class="btn save" href="dror-gal.vcf" download><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>שמירת איש קשר בטלפון</a>
  </div>
 
+
+ <section class="share" id="share"><h2>שתפו את הכרטיס</h2>
+  <div class="row">
+   <button class="main" id="shareBtn">📤 שיתוף הכרטיס</button>
+   <a id="waShare" href="#">💬 שליחה בוואטסאפ</a>
+   <button id="copyBtn">🔗 העתקת קישור</button>
+   <button id="qrBtn" style="grid-column:1/-1">▦ קוד QR לסריקה</button>
+  </div>
+  <div class="qr" id="qr"><img src="img/card-qr.png" alt="קוד QR לכרטיס"><p>הלקוח מכוון את המצלמה, והכרטיס נפתח אצלו</p></div>
+ </section>
  <section class="sec"><h2>על הטיפול</h2><p>המטרה היא לא רק להקל על הכאב, אלא לזהות את המקור ולשחרר אותו מהשורש. שיחה קצרה, בדיקה ממוקדת, טיפול ידני מותאם אישית והמלצות להמשך.</p></section>
  <section class="sec"><h2>שיטות טיפול</h2><ul><li>רקמות עמוקות</li><li>עיסוי ספורטאים</li><li>כוסות רוח</li><li>עיסוי תאילנדי</li><li>עיסוי שוודי</li><li>אבנים חמות</li><li>טריגר פוינט</li></ul></section>
  <section class="sec"><h2>📍 שבתאי הנגבי 71, ירושלים</h2>
@@ -65,4 +86,23 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
   <div class="hours"><p>שבת</p><p>סגור</p></div></section>
  <div class="foot">כרטיסיות טיפולים · לפרטים דברו איתי בוואטסאפ<br><a href="https://drorrosh-hue.github.io/">drorrosh-hue.github.io</a></div>
 </main>
+<div class="toast" id="toast">הקישור הועתק ✓</div>
+<script>
+(function(){
+ var url="https://drorrosh-hue.github.io/card.html";
+ var text="דרור גל · מעסה רפואי בירושלים. כל הפרטים, קביעת תור וניווט לקליניקה:";
+ var toast=document.getElementById("toast");
+ function show(m){toast.textContent=m;toast.classList.add("on");setTimeout(function(){toast.classList.remove("on")},1800)}
+ function copy(){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){show("הקישור הועתק ✓")},fallback)}else{fallback()}
+  function fallback(){var t=document.createElement("textarea");t.value=url;document.body.appendChild(t);t.select();try{document.execCommand("copy");show("הקישור הועתק ✓")}catch(e){prompt("העתיקו את הקישור:",url)}t.remove()}
+ }
+ document.getElementById("waShare").href="https://wa.me/?text="+encodeURIComponent(text+"\n"+url);
+ document.getElementById("copyBtn").onclick=copy;
+ document.getElementById("shareBtn").onclick=function(){
+  if(navigator.share){navigator.share({title:"דרור גל · מעסה רפואי",text:text,url:url}).catch(function(){})}else{copy()}
+ };
+ document.getElementById("qrBtn").onclick=function(){document.getElementById("qr").classList.toggle("on")};
+})();
+</script>
 </body></html>
