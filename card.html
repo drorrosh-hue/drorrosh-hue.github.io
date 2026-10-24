@@ -151,9 +151,8 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
 
  var deferred=null, insBtn=document.getElementById("installBtn"), insSheet=document.getElementById("insSheet");
  var standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone;
- if(standalone){insBtn.style.display="none"}
  window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferred=e});
- window.addEventListener("appinstalled",function(){insBtn.style.display="none";show("הכרטיס הותקן ✓")});
+ window.addEventListener("appinstalled",function(){show("הכרטיס הותקן ✓")});
  var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
  document.getElementById(ios?"insAndroid":"insIos").style.display="none";
  insBtn.onclick=function(){
