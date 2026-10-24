@@ -55,9 +55,23 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
 .qr.on{display:block}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:30px;font-size:15px;opacity:0;transition:.3s;pointer-events:none}
 .toast.on{opacity:.92}
+.fab{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:408px;height:60px;border:0;border-radius:18px;background:var(--goldl);color:var(--teald);font:800 19px Heebo,Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 14px 30px -10px rgba(0,0,0,.45);z-index:50;cursor:pointer}
+.card{padding-bottom:90px}
+.topshare{position:absolute;top:22px;left:16px;border:0;background:rgba(255,255,255,.16);color:#fff;font:700 15px Heebo,Arial,sans-serif;border-radius:30px;padding:9px 16px;cursor:pointer}
+.top .tag{display:none}
+.sheet{position:fixed;inset:0;background:rgba(10,25,26,.6);display:none;align-items:flex-end;justify-content:center;z-index:60}
+.sheet.on{display:flex}
+.sheet .box{width:100%;max-width:440px;background:var(--sand);border-radius:24px 24px 0 0;padding:20px 18px 28px}
+.sheet h3{text-align:center;color:var(--teald);font-size:20px;margin-bottom:14px}
+.sheet .opts{display:grid;gap:10px}
+.sheet .opts a,.sheet .opts button{display:flex;align-items:center;justify-content:center;gap:10px;height:56px;border-radius:16px;border:0;font:700 17.5px Heebo,Arial,sans-serif;text-decoration:none;cursor:pointer;background:var(--cream);color:var(--teald)}
+.sheet .opts .wa{background:#1f8f5a;color:#fff}
+.sheet .qrimg{width:200px;display:none;margin:12px auto 0}
+.sheet .qrimg.on{display:block}
+.sheet .close{margin-top:12px;background:transparent!important;color:var(--ink2)!important;height:44px!important}
 </style></head><body>
 <main class="card">
- <div class="top"><img class="logo" src="img/logo-dg.jpg" alt="לוגו"><span class="tag">כרטיס ביקור דיגיטלי</span></div>
+ <div class="top"><img class="logo" src="img/logo-dg.jpg" alt="לוגו"><span class="tag">כרטיס ביקור דיגיטלי</span><button class="topshare" data-open>📤 שיתוף</button></div>
  <img class="avatar" src="img/dror.jpg" alt="דרור גל, מעסה רפואי">
  <h1>דרור גל</h1>
  <div class="sub">מעסה רפואי · ירושלים</div>
@@ -92,6 +106,15 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
   <div class="hours"><p>שבת</p><p>סגור</p></div></section>
  <div class="foot">כרטיסיות טיפולים · לפרטים דברו איתי בוואטסאפ<br><a href="https://drorrosh-hue.github.io/">drorrosh-hue.github.io</a></div>
 </main>
+<button class="fab" data-open>📤 שלחו את הכרטיס</button>
+<div class="sheet" id="sheet"><div class="box"><h3>שליחת הכרטיס</h3><div class="opts">
+ <a class="wa" id="sWa" href="#">💬 שליחה בוואטסאפ</a>
+ <button id="sNative">📤 שיתוף לאפליקציה אחרת</button>
+ <button id="sCopy">🔗 העתקת קישור</button>
+ <button id="sQr">▦ הצגת קוד QR לסריקה</button>
+ <img class="qrimg" id="sQrImg" src="img/card-qr.png" alt="קוד QR">
+ <button class="close" id="sClose">סגירה</button>
+</div></div></div>
 <div class="toast" id="toast">הקישור הועתק ✓</div>
 <script>
 (function(){
@@ -109,6 +132,16 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
   if(navigator.share){navigator.share({title:"דרור גל · מעסה רפואי",text:text,url:url}).catch(function(){})}else{copy()}
  };
  document.getElementById("qrBtn").onclick=function(){document.getElementById("qr").classList.toggle("on")};
+
+ var sheet=document.getElementById("sheet");
+ Array.prototype.forEach.call(document.querySelectorAll("[data-open]"),function(b){b.onclick=function(){sheet.classList.add("on")}});
+ document.getElementById("sClose").onclick=function(){sheet.classList.remove("on")};
+ sheet.onclick=function(e){if(e.target===sheet)sheet.classList.remove("on")};
+ document.getElementById("sWa").href=document.getElementById("waShare").href;
+ document.getElementById("sCopy").onclick=copy;
+ document.getElementById("sNative").onclick=document.getElementById("shareBtn").onclick;
+ document.getElementById("sQr").onclick=function(){document.getElementById("sQrImg").classList.toggle("on")};
+ if(!navigator.share){document.getElementById("sNative").style.display="none"}
 })();
 </script>
 </body></html>
