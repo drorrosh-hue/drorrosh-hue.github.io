@@ -91,6 +91,7 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
   <a class="btn save" href="dror-gal.vcf" download><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>שמירת איש קשר בטלפון</a>
  </div>
 
+ <section class="aiBox"><h2>🤖 העוזר הדיגיטלי שלי</h2><p>רוצים לדעת מתי יש תור פנוי? לחצו על העוזר הדיגיטלי בפינת המסך — הוא בודק את היומן בזמן אמת, מציע שעות פנויות ועונה על שאלות. ואם אין שעה שמתאימה לכם, הוא יעביר את הפנייה אליי.</p><button type="button" onclick="openAI()">💬 שאלו את העוזר עכשיו</button></section>
  <button class="install" id="installBtn">📲 התקנת הכרטיס בטלפון שלי</button>
 
  <section class="share" id="share"><h2>שתפו את הכרטיס</h2>
@@ -102,7 +103,6 @@ h1{font-family:'Frank Ruhl Libre',serif;font-weight:700;text-align:center;font-s
   </div>
   <div class="qr" id="qr"><img src="img/card-qr.png" alt="קוד QR לכרטיס"><p>הלקוח מכוון את המצלמה, והכרטיס נפתח אצלו</p></div>
  </section>
- <section class="sec"><h2>🤖 העוזר הדיגיטלי</h2><p>רוצים לדעת מתי יש תור פנוי? לחצו על העוזר הדיגיטלי בפינת המסך — הוא בודק את היומן בזמן אמת, מציע שעות פנויות ועונה על שאלות. ואם אין שעה שמתאימה לכם, הוא יעביר את הפנייה אליי.</p></section>
  <section class="sec"><h2>על הטיפול</h2><p>המטרה היא לא רק להקל על הכאב, אלא לזהות את המקור ולשחרר אותו מהשורש. שיחה קצרה, בדיקה ממוקדת, טיפול ידני מותאם אישית והמלצות להמשך.</p></section>
  <section class="sec"><h2>שיטות טיפול</h2><ul><li>רקמות עמוקות</li><li>עיסוי ספורטאים</li><li>כוסות רוח</li><li>עיסוי תאילנדי</li><li>עיסוי שוודי</li><li>אבנים חמות</li><li>טריגר פוינט</li></ul></section>
  <section class="sec"><h2>📍 שבתאי הנגבי 71, ירושלים</h2>
@@ -179,6 +179,36 @@ body{padding-bottom:96px}
  try{if(sessionStorage.getItem("aiClosed"))off()}catch(e){}
  var x=document.getElementById("aiX");
  if(x)x.onclick=function(){try{sessionStorage.setItem("aiClosed","1")}catch(e){}off()};
+})();
+</script>
+<!-- 🤖 הבלטת העוזר הדיגיטלי (דרור, 26.10: "הרבה אנשים לא שמים לב") -->
+<style>
+#aiHint{position:fixed;right:14px;bottom:96px;z-index:2147483646;max-width:250px;background:#143a3b;color:#fff;border-radius:18px 18px 4px 18px;padding:12px 34px 12px 14px;font:700 15.5px/1.4 Heebo,Arial,sans-serif;box-shadow:0 12px 30px -8px rgba(0,0,0,.45);cursor:pointer;opacity:0;transform:translateY(10px);transition:.35s;pointer-events:none;direction:rtl}
+#aiHint.on{opacity:1;transform:none;pointer-events:auto;animation:aiPulse 2.4s ease-in-out 1s 3}
+#aiHint small{display:block;font-weight:400;font-size:13px;color:#d9bd8c;margin-top:2px}
+#aiHint b{position:absolute;top:6px;left:9px;font-size:17px;color:#d9bd8c;cursor:pointer}
+@keyframes aiPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.aiBox{margin:16px 18px 0;background:linear-gradient(135deg,#143a3b,#1f5557);color:#fff;border-radius:20px;padding:18px 16px;text-align:center;box-shadow:0 16px 36px -18px rgba(20,58,59,.8)}
+.aiBox h2{color:#d9bd8c!important;font-size:20px!important;margin:0 0 6px!important}
+.aiBox p{color:#eef4f3;font-size:15.5px;line-height:1.55;margin:0 0 12px}
+.aiBox button{border:0;border-radius:14px;background:#d9bd8c;color:#143a3b;font:800 17px Heebo,Arial,sans-serif;padding:13px 18px;width:100%;cursor:pointer}
+</style>
+<div id="aiHint" role="button" tabindex="0"><b id="aiHintX" aria-label="סגירה">×</b>👋 רוצים לדעת מתי יש תור פנוי?<small>שאלו את העוזר הדיגיטלי — הוא בודק את היומן עכשיו</small></div>
+<script>
+(function(){
+ function openAI(){
+  var w=document.querySelector("elevenlabs-convai");
+  try{var r=w&&w.shadowRoot;var b=r&&(r.querySelector('button[aria-label]')||r.querySelector('button'));if(b){b.click();hide();return true}}catch(e){}
+  if(w){w.scrollIntoView({behavior:"smooth",block:"end"})}
+  return false;
+ }
+ window.openAI=openAI;
+ var h=document.getElementById("aiHint");
+ function hide(){h.classList.remove("on");try{sessionStorage.setItem("aiHintSeen","1")}catch(e){}}
+ h.onclick=function(e){if(e.target.id==="aiHintX"){hide();return}openAI()};
+ var seen=false;try{seen=!!sessionStorage.getItem("aiHintSeen")||!!sessionStorage.getItem("aiClosed")}catch(e){}
+ if(!seen)setTimeout(function(){if(document.querySelector("elevenlabs-convai"))h.classList.add("on")},3500);
+ var x=document.getElementById("aiX");if(x)x.addEventListener("click",hide);
 })();
 </script>
 <script src="https://unpkg.com/@elevenlabs/convai-widget-embed@0.19.0" async type="text/javascript"></script>
